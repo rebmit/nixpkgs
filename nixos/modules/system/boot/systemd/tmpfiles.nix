@@ -257,17 +257,17 @@ in
         mkdir -p $out/lib/tmpfiles.d
         cd $out/lib/tmpfiles.d
 
-        ln -s "${systemd}/example/tmpfiles.d/home.conf"
-        ln -s "${systemd}/example/tmpfiles.d/journal-nocow.conf"
-        ln -s "${systemd}/example/tmpfiles.d/portables.conf"
-        ln -s "${systemd}/example/tmpfiles.d/static-nodes-permissions.conf"
-        ln -s "${systemd}/example/tmpfiles.d/systemd.conf"
-        ln -s "${systemd}/example/tmpfiles.d/systemd-nologin.conf"
-        ln -s "${systemd}/example/tmpfiles.d/systemd-nspawn.conf"
-        ln -s "${systemd}/example/tmpfiles.d/systemd-tmp.conf"
-        ln -s "${systemd}/example/tmpfiles.d/tmp.conf"
-        ln -s "${systemd}/example/tmpfiles.d/var.conf"
-        ln -s "${systemd}/example/tmpfiles.d/x11.conf"
+        ln -s "${systemd}/example/tmpfiles.d/home.conf"                     "10-home.conf"
+        ln -s "${systemd}/example/tmpfiles.d/journal-nocow.conf"            "10-journal-nocow.conf"
+        ln -s "${systemd}/example/tmpfiles.d/portables.conf"                "10-portables.conf"
+        ln -s "${systemd}/example/tmpfiles.d/static-nodes-permissions.conf" "10-static-nodes-permissions.conf"
+        ln -s "${systemd}/example/tmpfiles.d/systemd.conf"                  "10-systemd.conf"
+        ln -s "${systemd}/example/tmpfiles.d/systemd-nologin.conf"          "10-systemd-nologin.conf"
+        ln -s "${systemd}/example/tmpfiles.d/systemd-nspawn.conf"           "10-systemd-nspawn.conf"
+        ln -s "${systemd}/example/tmpfiles.d/systemd-tmp.conf"              "10-systemd-tmp.conf"
+        ln -s "${systemd}/example/tmpfiles.d/tmp.conf"                      "10-tmp.conf"
+        ln -s "${systemd}/example/tmpfiles.d/var.conf"                      "10-var.conf"
+        ln -s "${systemd}/example/tmpfiles.d/x11.conf"                      "10-x11.conf"
       '')
       # User-specified tmpfiles rules
       (pkgs.writeTextFile {
