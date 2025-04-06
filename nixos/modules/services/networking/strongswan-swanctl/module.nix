@@ -14,6 +14,21 @@ let
     (paramsToConf cfg.swanctl swanctlParams) + (concatMapStrings (i: "\ninclude ${i}") cfg.includes)
   );
   swanctlParams = import ./swanctl-params.nix lib;
+  swanctlDirectories = [
+    "swanctl/bliss"
+    "swanctl/ecdsa"
+    "swanctl/pkcs8"
+    "swanctl/pkcs12"
+    "swanctl/private"
+    "swanctl/pubkey"
+    "swanctl/rsa"
+    "swanctl/x509"
+    "swanctl/x509aa"
+    "swanctl/x509ac"
+    "swanctl/x509ca"
+    "swanctl/x509crl"
+    "swanctl/x509ocsp"
+  ];
 in
 {
   options.services.strongswan-swanctl = {
@@ -48,26 +63,21 @@ in
       }
     ];
 
-    environment.etc."swanctl/swanctl.conf".source = configFile;
-    environment.etc."strongswan.conf".text = cfg.strongswan.extraConfig;
-
     # The swanctl command complains when the following directories don't exist:
     # See: https://wiki.strongswan.org/projects/strongswan/wiki/Swanctldirectory
-    systemd.tmpfiles.rules = [
-      "d /etc/swanctl/x509 -" # Trusted X.509 end entity certificates
-      "d /etc/swanctl/x509ca -" # Trusted X.509 Certificate Authority certificates
-      "d /etc/swanctl/x509ocsp -"
-      "d /etc/swanctl/x509aa -" # Trusted X.509 Attribute Authority certificates
-      "d /etc/swanctl/x509ac -" # Attribute Certificates
-      "d /etc/swanctl/x509crl -" # Certificate Revocation Lists
-      "d /etc/swanctl/pubkey -" # Raw public keys
-      "d /etc/swanctl/private -" # Private keys in any format
-      "d /etc/swanctl/rsa -" # PKCS#1 encoded RSA private keys
-      "d /etc/swanctl/ecdsa -" # Plain ECDSA private keys
-      "d /etc/swanctl/bliss -"
-      "d /etc/swanctl/pkcs8 -" # PKCS#8 encoded private keys of any type
-      "d /etc/swanctl/pkcs12 -" # PKCS#12 containers
-    ];
+    environment.etc =
+      let
+        mkSymlink = path: nameValuePair path {
+          source = pkgs.emptyDirectory;
+          mode = "direct-symlink";
+        };
+      in
+      recursiveUpdate
+        (listToAttrs (map mkSymlink swanctlDirectories))
+        {
+          "swanctl/swanctl.conf".source = configFile;
+          "strongswan.conf".text = cfg.strongswan.extraConfig;
+        };
 
     systemd.services.strongswan-swanctl = {
       description = "strongSwan IPsec IKEv1/IKEv2 daemon using swanctl";
