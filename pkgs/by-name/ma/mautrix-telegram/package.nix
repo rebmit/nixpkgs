@@ -4,6 +4,7 @@
   fetchFromGitHub,
   python3,
 
+  fetchpatch2,
   withE2BE ? true,
 }:
 
@@ -39,6 +40,11 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   patches = [
     ./0001-Re-add-entrypoint.patch
     ./0001-handle-m.mentions-in-replies.patch
+    (fetchpatch2 {
+      name = "mautrix-telegram-sticker";
+      url = "https://github.com/mautrix/telegram/commit/0c2764e3194fb4b029598c575945060019bad236.patch?full_index=1";
+      hash = "sha256-DEfjpQSjH4gwKAfxXlJnaGwoMBMqoTnjeIHwDQCLXSk=";
+    })
   ];
 
   pythonRelaxDeps = [
