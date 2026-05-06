@@ -342,13 +342,7 @@ let
           fileName = path + "/${file}";
           packedRefsName = path + "/packed-refs";
           absolutePath =
-            base: path:
-            if hasPrefix "/" path then
-              path
-            else if hasPrefix "/" base then
-              "${base}/${path}"
-            else
-              "/${base}/${path}";
+            base: path: if hasPrefix "/" path then path else toString (/. + "${base}/${path}");
         in
         if
           pathIsRegularFile path
